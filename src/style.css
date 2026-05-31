@@ -119,3 +119,24 @@ dd {
     grid-column: auto;
   }
 }
+
+.hourly-list {
+  display: grid;
+  gap: 12px;
+}
+
+.hourly-item {
+  display: grid;
+  grid-template-columns: 90px 80px 1fr 1fr 1fr;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #edf1f6;
+  border-radius: 12px;
+  background: #f9fafb;
+}
+
+@media (max-width: 720px) {
+  .hourly-item {
+    grid-template-columns: 1fr;
+  }
+}
