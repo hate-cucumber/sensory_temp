@@ -64,6 +64,29 @@ function render(data: any) {
     setText("maxHumidity", value(data.maxFeelsLike.humidity));
     setText("maxFeels", value(data.maxFeelsLike.feelsLike));
   }
+
+  const hourlyEl = document.getElementById("hourlyFeelsLike");
+
+  if (hourlyEl) {
+    hourlyEl.innerHTML = "";
+
+    if (Array.isArray(data.hourlyFeelsLike)) {
+      for (const item of data.hourlyFeelsLike) {
+        const div = document.createElement("div");
+        div.className = "hourly-item";
+
+        div.innerHTML = `
+          <strong>${item.hourAfter}시간 뒤</strong>
+          <span>${item.time}</span>
+          <span>기온 ${item.temperature ?? "-"}℃</span>
+          <span>습도 ${item.humidity ?? "-"}%</span>
+          <span>체감 ${item.feelsLike ?? "-"}℃</span>
+        `;
+
+        hourlyEl.appendChild(div);
+      }
+    }
+  }
 }
 
 function setStatus(message: string) {
