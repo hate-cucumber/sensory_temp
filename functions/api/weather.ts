@@ -16,7 +16,7 @@ type KmaItem = {
 };
 
 const KMA_BASE_URL =
-  "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0";
+  "https://apihub.kma.go.kr/api/typ02/openApi/VilageFcstInfoService_2.0";
 
 export async function onRequestGet(context: {
   request: Request;
