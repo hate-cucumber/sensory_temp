@@ -34,7 +34,7 @@ export async function onRequestGet(context: {
     const now = new Date();
     const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
 
-    const address = `기상청 격자 기준 위치 nx=${grid.nx}, ny=${grid.ny}`;
+    const address = await getAddress(lat, lon);
     
     const ncstBase = getUltraSrtNcstBaseTime(kst);
     const fcstBase = getUltraSrtFcstBaseTime(kst);
@@ -121,6 +121,37 @@ export async function onRequestGet(context: {
       500
     );
   }
+}
+
+async function getAddress(lat: number, lon: number) {
+  const url =
+    `https://nominatim.openstreetmap.org/reverse` +
+    `?format=jsonv2&lat=${lat}&lon=${lon}` +
+    `&accept-language=ko`;
+
+  const res = await fetch(url, {
+    headers: {
+      "User-Agent": "weather-site"
+    }
+  });
+
+  const data: any = await res.json();
+
+  const a = data.address || {};
+
+  const city =
+    a.city ||
+    a.province ||
+    a.state ||
+    "";
+
+  const district =
+    a.city_district ||
+    a.borough ||
+    a.county ||
+    "";
+
+  return `${city} ${district}`.trim();
 }
 
 async function fetchKmaItems(params: {
