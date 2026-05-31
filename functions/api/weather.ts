@@ -133,7 +133,7 @@ async function fetchKmaItems(params: {
 }): Promise<KmaItem[]> {
   const url = new URL(`${KMA_BASE_URL}/${params.endpoint}`);
 
-  url.searchParams.set("authKey", params.serviceKey);
+  url.searchParams.set("serviceKey", params.serviceKey);
   url.searchParams.set("pageNo", "1");
   url.searchParams.set("numOfRows", "1000");
   url.searchParams.set("dataType", "JSON");
@@ -143,13 +143,27 @@ async function fetchKmaItems(params: {
   url.searchParams.set("ny", String(params.ny));
 
   const res = await fetch(url.toString());
-  const data: any = await res.json();
+  const rawText = await res.text();
+
+  if (!res.ok) {
+    throw new Error(
+      `기상청 HTTP 오류: ${res.status} ${res.statusText} / 응답: ${rawText}`
+    );
+  }
+
+  let data: any;
+
+  try {
+    data = JSON.parse(rawText);
+  } catch {
+    throw new Error(`기상청 응답이 JSON이 아닙니다. 응답 내용: ${rawText}`);
+  }
 
   const code = data?.response?.header?.resultCode;
+  const msg = data?.response?.header?.resultMsg;
+
   if (code !== "00") {
-    throw new Error(
-      `기상청 API 오류: ${data?.response?.header?.resultMsg ?? "unknown"}`
-    );
+    throw new Error(`기상청 API 오류: ${code} / ${msg}`);
   }
 
   return data?.response?.body?.items?.item ?? [];
