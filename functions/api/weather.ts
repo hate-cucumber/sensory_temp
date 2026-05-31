@@ -134,7 +134,7 @@ async function fetchKmaItems(params: {
 }): Promise<KmaItem[]> {
   const url = new URL(`${KMA_BASE_URL}/${params.endpoint}`);
 
-  url.searchParams.set("serviceKey", params.serviceKey);
+  url.searchParams.set("authKey", params.serviceKey);
   url.searchParams.set("pageNo", "1");
   url.searchParams.set("numOfRows", "1000");
   url.searchParams.set("dataType", "JSON");
