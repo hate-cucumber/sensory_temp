@@ -1,6 +1,5 @@
 interface Env {
   KMA_SERVICE_KEY: string;
-  KAKAO_REST_API_KEY: string;
 }
 
 type KmaItem = {
@@ -35,8 +34,8 @@ export async function onRequestGet(context: {
     const now = new Date();
     const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
 
-    const address = await getAddress(lat, lon, context.env.KAKAO_REST_API_KEY);
-
+    const address = `기상청 격자 기준 위치 nx=${grid.nx}, ny=${grid.ny}`;
+    
     const ncstBase = getUltraSrtNcstBaseTime(kst);
     const fcstBase = getUltraSrtFcstBaseTime(kst);
 
@@ -154,39 +153,6 @@ async function fetchKmaItems(params: {
   }
 
   return data?.response?.body?.items?.item ?? [];
-}
-
-async function getAddress(
-  lat: number,
-  lon: number,
-  kakaoKey: string
-): Promise<string> {
-  try {
-    const url = new URL(
-      "https://dapi.kakao.com/v2/local/geo/coord2address.json"
-    );
-    url.searchParams.set("x", String(lon));
-    url.searchParams.set("y", String(lat));
-
-    const res = await fetch(url.toString(), {
-      headers: {
-        Authorization: `KakaoAK ${kakaoKey}`,
-      },
-    });
-
-    if (!res.ok) return "주소 조회 실패";
-
-    const data: any = await res.json();
-    const doc = data?.documents?.[0];
-
-    return (
-      doc?.road_address?.address_name ||
-      doc?.address?.address_name ||
-      "주소 정보 없음"
-    );
-  } catch {
-    return "주소 조회 실패";
-  }
 }
 
 function findCurrentValue(items: KmaItem[], category: string): number {
