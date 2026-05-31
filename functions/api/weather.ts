@@ -88,6 +88,30 @@ export async function onRequestGet(context: {
       }))
       .sort((a, b) => b.feelsLike - a.feelsLike)[0];
 
+    const hourlyFeelsLike = forecastRows
+    .filter(
+      (row) =>
+        Number.isFinite(row.temperature) &&
+        Number.isFinite(row.humidity)
+    )
+    .slice(0, 6)
+    .map((row, index) => ({
+      hourAfter: index + 1,
+      date: row.date,
+      time: formatFcstTime(row.time),
+      temperature: round1(row.temperature),
+      humidity: round1(row.humidity),
+      windSpeed: round1(row.windSpeed),
+      feelsLike: round1(
+        calculateFeelsLike({
+          temperature: row.temperature,
+          humidity: row.humidity,
+          windSpeed: row.windSpeed,
+          date: parseKstDate(row.date, row.time),
+        })
+      ),
+    }));
+
     return json({
       address,
       lat,
@@ -111,6 +135,7 @@ export async function onRequestGet(context: {
             feelsLike: round1(maxFeelsLike.feelsLike),
           }
         : null,
+      hourlyFeelsLike,
     });
   } catch (error) {
     return json(
