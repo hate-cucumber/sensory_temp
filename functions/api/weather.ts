@@ -42,7 +42,7 @@ export async function onRequestGet(context: {
     const [currentItems, forecastItems] = await Promise.all([
       fetchKmaItems({
         serviceKey: context.env.KMA_SERVICE_KEY,
-        endpoint: "getUltraSrtNcst?",
+        endpoint: "getUltraSrtNcst",
         baseDate: ncstBase.baseDate,
         baseTime: ncstBase.baseTime,
         nx: grid.nx,
@@ -50,7 +50,7 @@ export async function onRequestGet(context: {
       }),
       fetchKmaItems({
         serviceKey: context.env.KMA_SERVICE_KEY,
-        endpoint: "getUltraSrtFcst?",
+        endpoint: "getUltraSrtFcst",
         baseDate: fcstBase.baseDate,
         baseTime: fcstBase.baseTime,
         nx: grid.nx,
