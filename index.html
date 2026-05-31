@@ -1,1 +1,54 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>체감온도 현황</title>
+  </head>
+  <body>
+    <main class="container">
+      <section class="hero">
+        <h1>현재 위치 체감온도</h1>
+        <p>기상청 초단기 실황·예보 기반 체감온도 정보</p>
+      </section>
 
+      <section class="card">
+        <button id="loadBtn">현재 위치 기준 조회</button>
+        <p id="status">조회 버튼을 눌러 위치 정보를 허용하세요.</p>
+      </section>
+
+      <section id="result" class="grid hidden">
+        <article class="card full">
+          <h2>위치 정보</h2>
+          <dl>
+            <div><dt>현 주소</dt><dd id="address">-</dd></div>
+            <div><dt>위도</dt><dd id="lat">-</dd></div>
+            <div><dt>경도</dt><dd id="lon">-</dd></div>
+            <div><dt>기준 시간</dt><dd id="time">-</dd></div>
+          </dl>
+        </article>
+
+        <article class="card">
+          <h2>현재 날씨</h2>
+          <dl>
+            <div><dt>기온</dt><dd><span id="currentTemp">-</span> ℃</dd></div>
+            <div><dt>습도</dt><dd><span id="currentHumidity">-</span> %</dd></div>
+            <div><dt>체감온도</dt><dd><span id="currentFeels">-</span> ℃</dd></div>
+          </dl>
+        </article>
+
+        <article class="card">
+          <h2>최고 체감온도</h2>
+          <dl>
+            <div><dt>예보 시간</dt><dd id="maxTime">-</dd></div>
+            <div><dt>기온</dt><dd><span id="maxTemp">-</span> ℃</dd></div>
+            <div><dt>습도</dt><dd><span id="maxHumidity">-</span> %</dd></div>
+            <div><dt>체감온도</dt><dd><span id="maxFeels">-</span> ℃</dd></div>
+          </dl>
+        </article>
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
