@@ -278,7 +278,7 @@ function calculateFeelsLike(input: {
   if (!Number.isFinite(temperature)) return NaN;
 
   if (month >= 5 && month <= 9 && Number.isFinite(humidity)) {
-    return calculateHeatIndex(temperature, humidity);
+    return calculateSummerFeelsLike(temperature, humidity);
   }
 
   if (
@@ -293,19 +293,22 @@ function calculateFeelsLike(input: {
   return temperature;
 }
 
-function calculateHeatIndex(t: number, rh: number): number {
-  const hi =
-    -8.784695 +
-    1.61139411 * t +
-    2.338549 * rh -
-    0.14611605 * t * rh -
-    0.012308094 * t * t -
-    0.016424828 * rh * rh +
-    0.002211732 * t * t * rh +
-    0.00072546 * t * rh * rh -
-    0.000003582 * t * t * rh * rh;
+function calculateSummerFeelsLike(ta: number, rh: number): number {
+  const tw =
+    ta * Math.atan(0.151977 * Math.sqrt(rh + 8.313659)) +
+    Math.atan(ta + rh) -
+    Math.atan(rh - 1.67633) +
+    0.00391838 * Math.pow(rh, 1.5) * Math.atan(0.023101 * rh) -
+    4.686035;
 
-  return hi;
+  return (
+    -0.2442 +
+    0.55399 * tw +
+    0.45535 * ta -
+    0.0022 * tw * tw +
+    0.00278 * tw * ta +
+    3.0
+  );
 }
 
 function calculateWindChill(t: number, windSpeedMs: number): number {
